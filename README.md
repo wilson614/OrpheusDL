@@ -7,9 +7,9 @@ OrpheusDL
 
 A modular music archival program
 
-[Report Bug](https://github.com/OrfiTeam/OrpheusDL/issues)
+[Report Bug](https://github.com/yarrm80s/orpheusdl/issues)
 ·
-[Request Feature](https://github.com/OrfiTeam/OrpheusDL/issues)
+[Request Feature](https://github.com/yarrm80s/orpheusdl/issues)
 
 
 ## Table of content
@@ -46,7 +46,7 @@ Follow these steps to get a local copy of Orpheus up and running:
 
 1. Clone the repo
     ```shell
-    git clone https://github.com/OrfiTeam/OrpheusDL.git && cd OrpheusDL
+    git clone https://github.com/yarrm80s/orpheusdl.git && cd orpheusdl
     ```
 2. Install all requirements
    ```shell
@@ -229,11 +229,11 @@ selected module
 <!-- Contact -->
 ## Contact
 
-OrfiDev (Project Lead) - [@OrfiDev](https://github.com/OrfiTeam)
+Yarrm80s - [@yarrm80s](https://github.com/yarrm80s)
 
-Dniel97 (Current Lead Developer) - [@Dniel97](https://github.com/Dniel97)
+Dniel97 - [@Dniel97](https://github.com/Dniel97)
 
-Project Link: [Orpheus Public GitHub Repository](https://github.com/OrfiTeam/OrpheusDL)
+Project Link: [Orpheus Public GitHub Repository](https://github.com/yarrm80s/orpheusdl)
 
 
 

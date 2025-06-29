@@ -16,6 +16,11 @@ from mutagen.oggvorbis import OggVorbis
 from utils.exceptions import *
 from utils.models import ContainerEnum, TrackInfo
 
+import requests
+from bs4 import BeautifulSoup
+from datetime import datetime
+import re
+
 # Needed for Windows tagging support
 MP4Tags._padding = 0
 
@@ -64,12 +69,18 @@ def tag_file(file_path: str, image_path: str, track_info: TrackInfo, credits_lis
             del tagger.tags['compatible_brands']
         if 'encoder' in tagger.tags:
             del tagger.tags['encoder']
+        if 'KKENCODER' in tagger.tags:
+            del tagger.tags['KKENCODER']
+        if 'REPLAYGAIN_REFERENCE_LOUDNESS' in tagger.tags:
+            del tagger.tags['REPLAYGAIN_REFERENCE_LOUDNESS']
 
-    tagger['title'] = track_info.name
+    name_without_extra_info = track_info.name.split(' ', 1)[0].strip()
+    tagger['title'] = name_without_extra_info
     if track_info.album: tagger['album'] = track_info.album
     if track_info.tags.album_artist: tagger['albumartist'] = track_info.tags.album_artist
 
-    tagger['artist'] = track_info.artists
+    artists_s= re.sub(r'\([^()]*\)', '', track_info.artists[0]).strip()
+    tagger['artist'] = artists_s
 
     if container == ContainerEnum.m4a or container == ContainerEnum.mp3:
         if track_info.tags.track_number and track_info.tags.total_tracks:
@@ -96,9 +107,23 @@ def tag_file(file_path: str, image_path: str, track_info: TrackInfo, credits_lis
             # Now add the year tag
             tagger['date'] = str(track_info.release_year)
         else:
-            tagger['date'] = track_info.tags.release_date
+            tagger['date'] = str(track_info.release_year)
+            print(str(track_info.release_year))
     else:
-        tagger['date'] = str(track_info.release_year)
+        song_info = track_info.cover_extra_kwargs
+        song_id = song_info['data']['song_id']
+        url = 'https://www.kkbox.com/tw/tc/song/' + song_id
+        response = requests.get(url)
+        # 使用 BeautifulSoup 解析网页内容
+        soup = BeautifulSoup(response.text, 'html.parser')
+        # 提取具有指定 class 属性的内容
+        content = soup.find(class_='release').text
+        # 解析日期字符串
+        date_obj = datetime.strptime(content, '%Y/%m/%d')
+        # 提取年份部分
+        year = date_obj.year
+        tagger['date'] = str(year)
+        # tagger['date'] = str(track_info.release_year)
 
     if track_info.tags.copyright:tagger['copyright'] = track_info.tags.copyright
 
